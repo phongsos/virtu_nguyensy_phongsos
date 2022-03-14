@@ -1,13 +1,13 @@
-package esiee.ngupho.frontend;
+package esiee.ngupho.microserv2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FrontendApplication {
+public class MicroServ2Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(FrontendApplication.class, args);
+        SpringApplication.run(MicroServ2Application.class, args);
     }
 
 }
