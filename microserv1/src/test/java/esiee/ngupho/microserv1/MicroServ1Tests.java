@@ -1,10 +1,10 @@
-package esiee.ngupho.backend;
+package esiee.ngupho.microserv1;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackendTests {
+class MicroServ1Tests {
 
     @Test
     void contextLoads() {
