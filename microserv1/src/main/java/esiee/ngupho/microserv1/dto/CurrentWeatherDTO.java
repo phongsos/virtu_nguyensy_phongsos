@@ -49,8 +49,8 @@ public class CurrentWeatherDTO {
     }
 
     // Display
-    @java.lang.Override
-    public java.lang.String toString() {
+    @Override
+    public String toString() {
         return "CurrentWeatherDTO{" +
                 "location='" + location + '\'' +
                 ", temperature=" + temperature +
