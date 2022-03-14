@@ -17,6 +17,7 @@ ext {
 }
 
 dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
