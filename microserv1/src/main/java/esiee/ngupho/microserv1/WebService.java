@@ -13,12 +13,19 @@ import org.springframework.web.client.RestTemplate;
 
 import esiee.ngupho.microserv1.dto.CurrentWeatherDTO;
 
+import java.util.ArrayList;
+
 @RestController
 public class WebService {
 
     @Value("${weatherAPIKey}")
     String apiKey;
 
+    /**
+     * Returns the current weather for a defined location
+     * @param location
+     * @return
+     */
     @RequestMapping(path = "/current", method = RequestMethod.GET)
     public ResponseEntity<CurrentWeatherDTO> current(@RequestParam String location){
         CurrentWeatherDTO currentWeatherDTO = new CurrentWeatherDTO();
@@ -42,18 +49,49 @@ public class WebService {
             JsonNode wind = root.get("current").get("wind_kph");
             JsonNode txt = root.get("current").get("condition").get("text");
 
+            // Setting the DTO
             currentWeatherDTO.setLocation(name.textValue() + ", " + region.textValue() + ", " + country.textValue());
             currentWeatherDTO.setTemperature(temperature.asDouble());
             currentWeatherDTO.setHumidity(humidity.asInt());
             currentWeatherDTO.setWind(wind.asDouble());
             currentWeatherDTO.setText(txt.textValue());
 
-            System.out.println(currentWeatherDTO);
-            System.out.println(data);
-            return new ResponseEntity<CurrentWeatherDTO>(currentWeatherDTO,HttpStatus.OK);
+            return new ResponseEntity<CurrentWeatherDTO>(currentWeatherDTO, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-            return new ResponseEntity<CurrentWeatherDTO>(currentWeatherDTO,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<CurrentWeatherDTO>(currentWeatherDTO, HttpStatus.BAD_REQUEST);
         }
     }
+
+    /**
+     * Returns helps for text autocompletion
+     * @param query
+     * @return
+     */
+    @RequestMapping(path = "/autocomplete", method = RequestMethod.GET)
+    public ArrayList<String> autocomplete(@RequestParam String query){
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String data = restTemplate.getForObject("http://api.weatherapi.com/v1/search.json?lang=fr&key=" + apiKey
+                    + "&q=" + query, String.class);
+
+            // Use Jackson to convert String to JSON Object
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(data);
+
+            ArrayList<String> helps = new ArrayList<String>();
+            for (JsonNode result: root) {
+                JsonNode name = result.get("name");
+                JsonNode region = result.get("region");
+                JsonNode country = result.get("country");
+                helps.add(name.textValue() + ", " + region.textValue() + ", " + country.textValue());
+            }
+
+            return helps;
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return new ArrayList<String>();
+        }
+    }
+
 }
