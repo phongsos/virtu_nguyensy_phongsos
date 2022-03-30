@@ -2,7 +2,7 @@ package esiee.ngupho.microserv1.dto;
 
 public class CurrentWeatherDTO {
     private String location;
-    private double temperature;
+    private int temperature;
     private int humidity;
     private double wind;
     private String text;
@@ -16,11 +16,11 @@ public class CurrentWeatherDTO {
         this.location = location;
     }
 
-    public double getTemperature() {
+    public int getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(double temperature) {
+    public void setTemperature(int temperature) {
         this.temperature = temperature;
     }
 
