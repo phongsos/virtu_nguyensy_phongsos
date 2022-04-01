@@ -1,1 +1,32 @@
-# Test
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microserv1-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microserv1
+  template:
+    metadata:
+      labels:
+        app: microserv1
+    spec:
+      containers:
+        - name: microserv1
+          image: phongsos/microserv1:latest
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: microserv1-service
+spec:
+  ports:
+    - name: http
+      targetPort: 8080
+      port: 80
+  type: ClusterIP
+  selector:
+app: microserv1

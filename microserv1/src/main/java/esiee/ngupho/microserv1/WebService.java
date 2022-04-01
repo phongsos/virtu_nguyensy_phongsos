@@ -69,7 +69,9 @@ public class WebService {
     }
 
     /**
-     *
+     * Returns weather forecasts for the next days
+     * @param location
+     * @return
      */
     @RequestMapping(path = "/forecasts", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<ForecastDayDTO>> forecasts(@RequestParam String location) {
