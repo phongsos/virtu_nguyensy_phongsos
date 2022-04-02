@@ -26,7 +26,7 @@ public class WebService {
                 return "It works!";
             }
         } catch (Exception e){
-            return e.getLocalizedMessage();
+            return "Exception";
         }
     }
 }
