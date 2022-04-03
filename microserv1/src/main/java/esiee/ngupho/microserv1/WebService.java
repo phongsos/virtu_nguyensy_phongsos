@@ -26,6 +26,11 @@ public class WebService {
     @Value("${weatherAPIKey}")
     String apiKey;
 
+    @RequestMapping(path = "/status", method = RequestMethod.GET)
+    public String status(){
+        return "MS1 is running !";
+    }
+
     /**
      * Returns the current weather for a defined location
      * @param location
