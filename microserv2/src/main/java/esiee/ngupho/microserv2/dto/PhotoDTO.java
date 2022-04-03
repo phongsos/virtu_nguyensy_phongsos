@@ -4,6 +4,7 @@ public class PhotoDTO {
     private long id;
     private String owner;
     private String title;
+    private String source;
 
     public long getId() {
         return id;
@@ -29,12 +30,21 @@ public class PhotoDTO {
         this.title = title;
     }
 
-    @Override
-    public String toString() {
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
         return "PhotoDTO{" +
                 "id=" + id +
                 ", owner='" + owner + '\'' +
                 ", title='" + title + '\'' +
+                ", source='" + source + '\'' +
                 '}';
     }
 }

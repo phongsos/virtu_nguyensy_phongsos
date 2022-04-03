@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'front-end';
+  imageSearch: string = "";
+
+  searchImage() {
+    alert("searchImage()");
+    // localhost:8080/current
+  }
 }

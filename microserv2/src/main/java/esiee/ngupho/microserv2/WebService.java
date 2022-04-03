@@ -14,24 +14,6 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class WebService {
-
-//    @Value("${backEndURL}")
-//    String backEndURL;
-
-//    @RequestMapping(path = "/", method = RequestMethod.GET)
-//    public String hello(){
-//        try{
-//            RestTemplate restTemplate = new RestTemplate();
-//            String s = restTemplate.getForObject(backEndURL, String.class);
-//            return "hello (from the front end)" + " " + s + " (from the back end)";
-//        }catch (Exception e){
-//            return e.getLocalizedMessage();
-//        }
-//    }
-
-    @Value("${flickerAPIKey}")
-    String apiKey;
-
     /**
      * Returns a picture according to a tag
      * @param tag
@@ -39,25 +21,34 @@ public class WebService {
      */
     @RequestMapping(path = "/current", method = RequestMethod.GET)
     public ResponseEntity<PhotoDTO> current(@RequestParam String tag){
+        String QWANT_LOCALE = "fr_fr";
+        String QWANT_SAFESEARCH = "1";
+
         PhotoDTO photoDTO = new PhotoDTO();
+
         try {
             RestTemplate restTemplate = new RestTemplate();
-            String data = restTemplate.getForObject("https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + apiKey + "&tags=" + tag
-                    + "&extras=url_m,tags&format=json&nojsoncallback=1", String.class);
+            String data = restTemplate.getForObject("https://api.qwant.com/v3/search/images"
+                    + "?locale=" + QWANT_LOCALE
+                    + "safesearch=" + QWANT_SAFESEARCH
+                    + "q=" + tag
+                    , String.class);
 
             // Use Jackson to convert String to JSON Object
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(data);
 
             // Getting data
-            JsonNode id = root.get("photos").get("photo").get(0).get("id");
-            JsonNode owner = root.get("photos").get("photo").get(0).get("owner");
-            JsonNode title = root.get("photos").get("photo").get(0).get("title");
+            JsonNode id = root.get("data").get("result").get("items").get(0).get("_id");
+            //JsonNode owner = "N/A";
+            JsonNode title = root.get("data").get("result").get("items").get(0).get("title");
+            JsonNode source = root.get("data").get("result").get("items").get(0).get("media");
 
             // Setting the DTO
             photoDTO.setId(id.asLong());
-            photoDTO.setOwner(owner.textValue());
+            photoDTO.setOwner("N/A");
             photoDTO.setTitle(title.textValue());
+            photoDTO.setSource(source.textValue());
 
             return new ResponseEntity<PhotoDTO>(photoDTO, HttpStatus.OK);
         } catch (Exception e) {
