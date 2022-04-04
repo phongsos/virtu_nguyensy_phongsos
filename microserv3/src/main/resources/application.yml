@@ -1,1 +1,2 @@
 microserv1URL : http://microserv1-service.default.svc.cluster.local:80
+microserv2URL : http://microserv2-service.default.svc.cluster.local:80

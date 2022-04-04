@@ -14,13 +14,18 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class WebService {
+    @RequestMapping(path = "/status", method = RequestMethod.GET)
+    public String status(){
+        return "MS2 is running !";
+    }
+
     /**
      * Returns a picture according to a tag
      * @param tag
      * @return
      */
-    @RequestMapping(path = "/current", method = RequestMethod.GET)
-    public ResponseEntity<PhotoDTO> current(@RequestParam String tag){
+    @RequestMapping(path = "/search", method = RequestMethod.GET)
+    public ResponseEntity<PhotoDTO> search(@RequestParam String tag){
         String QWANT_LOCALE = "fr_fr";
         String QWANT_SAFESEARCH = "1";
 
@@ -30,8 +35,8 @@ public class WebService {
             RestTemplate restTemplate = new RestTemplate();
             String data = restTemplate.getForObject("https://api.qwant.com/v3/search/images"
                     + "?locale=" + QWANT_LOCALE
-                    + "safesearch=" + QWANT_SAFESEARCH
-                    + "q=" + tag
+                    + "&safesearch=" + QWANT_SAFESEARCH
+                    + "&q=" + tag
                     , String.class);
 
             // Use Jackson to convert String to JSON Object

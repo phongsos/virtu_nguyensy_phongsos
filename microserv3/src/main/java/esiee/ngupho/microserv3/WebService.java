@@ -13,12 +13,18 @@ public class WebService {
     @Value("${microserv1URL}")
     String microserv1URL;
 
+    @Value("${microserv2URL}")
+    String microserv2URL;
+
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String status(){
         try{
             RestTemplate restTemplate = new RestTemplate();
             String s = restTemplate.getForObject(microserv1URL + "/status", String.class);
-            return "MS3 is running ! (from the MS3)" + " " + s + " (from MS1)";
+            String s2 = restTemplate.getForObject(microserv2URL + "/status", String.class);
+            return "MS3 is running ! (from the MS3)\n" +
+                    s2 + " (from MS2)\n"
+                    + s + " (from MS1)";
         }catch (Exception e){
             return e.getLocalizedMessage();
         }
