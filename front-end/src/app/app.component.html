@@ -6,4 +6,10 @@
     <button type="button" class="btn btn-primary" (click)="searchImage()">
         <i class="fas fa-search"></i>
     </button>
+
+    <div class="output">
+        <ul>
+            <li *ngFor="let output of outputs">{{output}}</li>
+        </ul>
+    </div>
 </div>

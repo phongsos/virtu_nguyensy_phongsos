@@ -1,6 +1,6 @@
 FROM node:alpine AS node
 WORKDIR /app
-COPY . .k
+COPY . .
 RUN npm ci && npm run build
 
 FROM nginx:alpine
