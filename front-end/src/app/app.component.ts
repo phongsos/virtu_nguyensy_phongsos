@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -9,13 +9,13 @@ import { HttpClient } from '@angular/common/http';
 export class AppComponent {
   title = 'front-end';
   imageSearch: string = "";
-  url_backend = 'http://microserv3-service.default.svc.cluster.local:80';
+  url_backend = 'http://localhost:31001';
 
   constructor(private http: HttpClient) { }
 
   searchImage() {
-    this.http.get<any>(this.url_backend + "/").subscribe(data => {
-      alert(data.text);
+    this.http.get(this.url_backend + "/current?location=" + this.imageSearch, {responseType: 'text'}).subscribe(data => {
+      console.log(data);
     })
   }
 }
