@@ -124,8 +124,9 @@ spec:
   ports:
     - name: http
       targetPort: 8080
+      nodePort: 31001
       port: 80
-  type: ClusterIP
+  type: NodePort
   selector:
     app: microserv3
 
@@ -138,8 +139,8 @@ metadata:
 spec:
   ports:
     - name: http
-      targetPort: 80
+      nodePort: 31000
       port: 80
-  type: ClusterIP
+  type: NodePort
   selector:
     app: front-end
