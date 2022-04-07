@@ -1,15 +1,70 @@
-<div class="input-group">
-    <div class="form-outline">
-        <input type="search" id="form1" class="form-control" [(ngModel)]="imageSearch" />
-        <label class="form-label" for="form1">Search</label>
-    </div>
-    <button type="button" class="btn btn-primary" (click)="searchImage()">
-        <i class="fas fa-search"></i>
-    </button>
+<mat-toolbar color="accent">
+    <span class="title-nav">Météo Franche</span>
+</mat-toolbar>
 
-    <div class="output">
-        <ul>
-            <li *ngFor="let output of outputs">{{output}}</li>
-        </ul>
-    </div>
+<div class="input-group">
+    <mat-grid-list cols="4" rowHeight="100px">
+        <!-- SEARCH BAR -->
+        <mat-grid-tile colspan="4" rowspan="1">
+            <ng-container>
+                <mat-form-field appearance="outline" style="min-width: 30%;">
+                    <input matInput [(ngModel)]="location" placeholder="Search">
+                </mat-form-field>
+                <button mat-flat-button color="primary" (click)="search()" style="margin-left: -0.3em; height: 52px; margin-top: -1.35em;">
+                    <mat-icon>search</mat-icon>
+                </button>
+            </ng-container>
+        </mat-grid-tile>
+
+        <!-- EMPTY -->
+        <mat-grid-tile colspan="1" rowspan="6">
+            <div class="output">
+                <ul>
+                    <li *ngFor="let output of outputs">{{output}}</li>
+                </ul>
+            </div>
+        </mat-grid-tile>
+
+        <!-- WEATHER -->
+        <mat-grid-tile colspan="1" rowspan="6">
+            <mat-card class="weather">
+                <mat-card-header>
+                    <mat-card-title>Météo du jour</mat-card-title>
+                    <mat-card-subtitle>{{ date | date:'dd.MM.yyyy' }}</mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <mat-card class="data">
+                        <mat-card-content class="degree">16°</mat-card-content>
+                        <mat-card-title>{{ current_loc1 }}</mat-card-title>
+                        <mat-card-subtitle>{{ current_loc2 }}</mat-card-subtitle>
+                        <mat-card-content>
+                            <mat-grid-list cols="2" rowHeight="16px">
+                                <mat-grid-tile colspan="1" rowspan="1"><b>Vent</b></mat-grid-tile>
+                                <mat-grid-tile colspan="1" rowspan="1"><b>Humidité</b></mat-grid-tile>
+                                <mat-grid-tile colspan="1" rowspan="1">35km/h</mat-grid-tile>
+                                <mat-grid-tile colspan="1" rowspan="1">80%</mat-grid-tile>
+                            </mat-grid-list>
+                        </mat-card-content>
+                    </mat-card>
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+
+        <!-- ADVICES -->
+        <mat-grid-tile colspan="1" rowspan="6">
+            <mat-card class="advices">
+                <mat-card-header>
+                    <mat-card-title>Nos conseils</mat-card-title>
+                    <mat-card-subtitle>Ce que vous devriez prendre avec vous !</mat-card-subtitle>
+                </mat-card-header>
+            </mat-card>
+        </mat-grid-tile>
+
+        <!-- EMPTY -->
+        <mat-grid-tile colspan="1" rowspan="6"></mat-grid-tile>
+
+        <!-- FORECASTS -->
+        <mat-grid-tile colspan="4" rowspan="2"></mat-grid-tile>
+    </mat-grid-list>
 </div>

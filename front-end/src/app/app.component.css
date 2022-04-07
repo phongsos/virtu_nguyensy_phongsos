@@ -1,1 +1,33 @@
-@import '~bootstrap/dist/css/bootstrap.min.css';
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Bubbles&display=swap');
+
+.weather, .advices {
+    min-width: 95%;
+    max-width: 95%;
+    max-height: 100%;
+    min-height: 100%;
+    box-shadow: none;
+    margin: auto;
+}
+
+.weather .data {
+    text-align: center;
+    box-shadow: none;
+    padding: 3em 3em 2em 3em;
+    background-color: #3f51b5;
+    color: white;
+}
+
+.weather .data mat-card-subtitle {
+    color: white;
+}
+
+.degree {
+    font-size: 5em;
+    margin-bottom: 30px;
+}
+
+.title-nav {
+    margin: auto;
+    font-size: 2em;
+    font-family: 'Rubik Bubbles', cursive;
+}

@@ -94,8 +94,9 @@ spec:
   ports:
     - name: http
       targetPort: 8080
+      nodePort: 31002
       port: 80
-  type: ClusterIP
+  type: NodePort
   selector:
     app: microserv1
 
