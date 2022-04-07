@@ -2,9 +2,7 @@ package esiee.ngupho.microserv3;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import esiee.ngupho.microserv1.dto.CurrentWeatherDTO;
-import esiee.ngupho.microserv1.utils.WeatherConstants;
-import esiee.ngupho.microserv2.dto.PhotoDTO;
+import esiee.ngupho.microserv3.utils.WeatherConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 @RestController
@@ -40,6 +39,7 @@ public class WebService {
 
     @RequestMapping(path = "/current", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<String>> weatherCurrentOutfit(@RequestParam String location) {
+        ArrayList<String> photosList = new ArrayList<String>();
         try {
             RestTemplate restTemplate = new RestTemplate();
             String s = restTemplate.getForObject(microserv1URL + "/current?location=" + location, String.class);
@@ -51,22 +51,20 @@ public class WebService {
             int temperature = root.get("temperature").asInt();
             String txt = root.get("text").textValue();
 
-            ArrayList<String> photosList = new ArrayList<String>();
-
-            if(WeatherConstants.TEXT_RAIN.find(txt)) {
+            if(Arrays.asList(WeatherConstants.TEXT_RAIN).contains(txt)) {
                 String tag = "parapluie png";
 
-                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + tag, String.class);
                 mapper = new ObjectMapper();
                 root = mapper.readTree(s);
 
                 String photoSource = root.get("source").textValue();
 
                 photosList.add(photoSource);
-            } else if(WeatherConstants.TEXT_SNOW.find(txt)) {
+            } else if(Arrays.asList(WeatherConstants.TEXT_SNOW).contains(txt)) {
                 String tag = "bonnet png";
 
-                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + tag, String.class);
                 mapper = new ObjectMapper();
                 root = mapper.readTree(s);
 
@@ -75,17 +73,17 @@ public class WebService {
                 photosList.add(photoSource);
                 tag = "gants png";
 
-                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + tag, String.class);
                 mapper = new ObjectMapper();
                 root = mapper.readTree(s);
 
                 photoSource = root.get("source").textValue();
 
                 photosList.add(photoSource);
-            } else if(WeatherConstants.TEXT_SUN.find(txt)) {
+            } else if(Arrays.asList(WeatherConstants.TEXT_SUN).contains(txt)) {
                 String tag = "chapeau png";
 
-                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + tag, String.class);
                 mapper = new ObjectMapper();
                 root = mapper.readTree(s);
 
@@ -97,7 +95,7 @@ public class WebService {
             if(temperature <= 12) {
                 String tag = "écharpe png";
 
-                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + tag, String.class);
                 mapper = new ObjectMapper();
                 root = mapper.readTree(s);
 
@@ -109,7 +107,7 @@ public class WebService {
             if(photosList.size() == 0) {
                 String tag = "citation sourire";
 
-                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + tag, String.class);
                 mapper = new ObjectMapper();
                 root = mapper.readTree(s);
 

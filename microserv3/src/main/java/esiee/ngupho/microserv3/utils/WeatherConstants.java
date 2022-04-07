@@ -1,4 +1,4 @@
-package esiee.ngupho.microserv1.utils;
+package esiee.ngupho.microserv3.utils;
 
 public final class WeatherConstants {
     public static final String[] TEXT_SNOW = new String[] {
