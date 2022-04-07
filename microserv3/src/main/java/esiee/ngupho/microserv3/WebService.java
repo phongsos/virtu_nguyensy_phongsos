@@ -1,8 +1,18 @@
 package esiee.ngupho.microserv3;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import esiee.ngupho.microserv1.dto.CurrentWeatherDTO;
+import esiee.ngupho.microserv1.utils.WeatherConstants;
+import esiee.ngupho.microserv2.dto.PhotoDTO;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+
 
 @RestController
 @CrossOrigin
@@ -29,19 +39,90 @@ public class WebService {
     }
 
     @RequestMapping(path = "/current", method = RequestMethod.GET)
-    public String weatherCurrentOutfit(@RequestParam String location) {
+    public ResponseEntity<ArrayList<String>> weatherCurrentOutfit(@RequestParam String location) {
         try {
             RestTemplate restTemplate = new RestTemplate();
             String s = restTemplate.getForObject(microserv1URL + "/current?location=" + location, String.class);
 
-            if(s.isEmpty()) {
-                return "Doesn't work :c";
+            // Use Jackson to convert String to JSON Object
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(s);
+
+            int temperature = root.get("temperature").asInt();
+            String txt = root.get("text").textValue();
+
+            ArrayList<String> photosList = new ArrayList<String>();
+
+            if(WeatherConstants.TEXT_RAIN.find(txt)) {
+                String tag = "parapluie png";
+
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                mapper = new ObjectMapper();
+                root = mapper.readTree(s);
+
+                String photoSource = root.get("source").textValue();
+
+                photosList.add(photoSource);
+            } else if(WeatherConstants.TEXT_SNOW.find(txt)) {
+                String tag = "bonnet png";
+
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                mapper = new ObjectMapper();
+                root = mapper.readTree(s);
+
+                String photoSource = root.get("source").textValue();
+
+                photosList.add(photoSource);
+                tag = "gants png";
+
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                mapper = new ObjectMapper();
+                root = mapper.readTree(s);
+
+                photoSource = root.get("source").textValue();
+
+                photosList.add(photoSource);
+            } else if(WeatherConstants.TEXT_SUN.find(txt)) {
+                String tag = "chapeau png";
+
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                mapper = new ObjectMapper();
+                root = mapper.readTree(s);
+
+                String photoSource = root.get("source").textValue();
+
+                photosList.add(photoSource);
             }
-            else {
-                return "It works!";
+
+            if(temperature <= 12) {
+                String tag = "écharpe png";
+
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                mapper = new ObjectMapper();
+                root = mapper.readTree(s);
+
+                String photoSource = root.get("source").textValue();
+
+                photosList.add(photoSource);
             }
-        } catch (Exception e){
-            return e.getLocalizedMessage();
+
+            if(photosList.size() == 0) {
+                String tag = "citation sourire";
+
+                s = restTemplate.getForObject(microserv2URL + "/search?tag=" + location, String.class);
+                mapper = new ObjectMapper();
+                root = mapper.readTree(s);
+
+                String photoSource = root.get("source").textValue();
+
+                photosList.add(photoSource);
+            }
+
+
+            return new ResponseEntity<ArrayList<String>>(photosList, HttpStatus.OK);
+        }  catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return new ResponseEntity<ArrayList<String>>(photosList, HttpStatus.BAD_REQUEST);
         }
     }
 
